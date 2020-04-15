@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style type="text/css">
+        #container {width:1000px; height: 480px; }
+    </style>
+    <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.15&key=c768f1c9832f2df510dc2a6bdeaf5729"></script>
+</head>
+<body>
+<div id="container"></div>
+</body>
+
+<script type="text/javascript">
+    window.onload = function () {
+        var map = new AMap.Map('container');
+        var map = new AMap.Map('container', {
+            zoom:11,//级别
+            center: [116.397428, 39.90923],//中心点坐标
+            viewMode:'3D'//使用3D视图
+        });
+        map.on('click', function(ev) {
+            console.log(ev)
+            // 触发事件的对象
+            var target = ev.target;
+            // 触发事件的地理坐标，AMap.LngLat 类型
+            var lnglat = ev.lnglat;
+            // 触发事件的像素坐标，AMap.Pixel 类型
+            var pixel = ev.pixel;
+            // 触发事件类型
+            var type = ev.type;
+            getAddress(lnglat)
+        });
+    }
+
+    function getAddress(lnglat) {
+        AMap.plugin('AMap.Geocoder', function() {
+            var geocoder = new AMap.Geocoder({
+                // city 指定进行编码查询的城市，支持传入城市名、adcode 和 citycode
+                // city: '010'
+            })
+            geocoder.getAddress(lnglat, function(status, result) {
+                if (status === 'complete' && result.info === 'OK') {
+                    // result为对应的地理位置详细信息
+                    console.log(result)
+                }
+            })
+        })
+    }
+</script>
+</html>
